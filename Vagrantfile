@@ -9,21 +9,16 @@ Vagrant::Config.run do |config|
 
   config.vm.forward_port 80, 8080
 
-  config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path = "cookbooks"
+  config.vm.provision :chef_client do |chef|
 
-    chef.add_recipe "apt"
-    chef.add_recipe "build-essential"
-    chef.add_recipe "openssl"
-    chef.add_recipe "wordpress"
-
-    chef.json = {
-      "mysql" => {
-        "server_debian_password" => "wordpress",
-        "server_root_password" => "wordpress",
-        "server_repl_password" => "wordpress"
-      }
-    }
+    user = ENV["USER"]
+    dir = File.basename(Dir.getwd)
+    
+    chef.chef_server_url = "http://10.120.50.16:4000"
+    chef.validation_key_path = "~/.chef/validation.pem"
+    chef.node_name = "#{user}-wordpress-#{dir}"
+    chef.environment = "vagrant"
+    chef.add_role "wordpress"
 
   end
 

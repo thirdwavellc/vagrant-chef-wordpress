@@ -13,10 +13,11 @@ Vagrant::Config.run do |config|
 
     user = ENV["USER"]
     dir = File.basename(Dir.getwd)
-    
+    node = "#{user}-wordpress-#{dir}"
+
     chef.chef_server_url = "http://10.120.50.16:4000"
     chef.validation_key_path = "~/.chef/validation.pem"
-    chef.node_name = "#{user}-wordpress-#{dir}"
+    chef.node_name = node
     chef.environment = "vagrant"
     chef.add_role "wordpress"
 

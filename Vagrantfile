@@ -1,11 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-chefserver = "http://chef.thirdwave.local:4000"
-home = File.expand_path("~")
-user = ENV["USER"]
-dir = File.basename(Dir.getwd)
-node = "#{user}-wordpress-#{dir}"
+$boxes = ["client-wordpress"]
 
 Vagrant::Config.run do |config|
 
@@ -15,11 +11,13 @@ Vagrant::Config.run do |config|
 
   config.vm.forward_port 80, 8080
 
+  config.vm.host_name = "wordpress.vagrant"
+
   config.vm.provision :chef_client do |chef|
 
-    chef.chef_server_url = chefserver
-    chef.validation_key_path = "#{home}/.chef/validation.pem"
-    chef.node_name = node
+    chef.chef_server_url = $chefserver
+    chef.validation_key_path = "#{$home}/.chef/validation.pem"
+    chef.node_name = getNode
     chef.environment = "vagrant"
     chef.add_role "wordpress"
 

@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
   config.berkshelf.enabled = true
   config.omnibus.chef_version = :latest
 
-  if Vagrant.has_plugin? "vagrant-cachier" do
+  if Vagrant.has_plugin? "vagrant-cachier"
     config.cache.scope = :box
   end
 
